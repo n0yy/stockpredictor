@@ -4,20 +4,27 @@ from datetime import date
 from src.load_data import load_data, get_news
 from src.plot_data import plot_stock
 from src.model import StockForecast
+from src.database import Database
 
 st.set_page_config(page_title="Tuyul Modern")
 
+
+
+
 START = "2017-01-01"
 TODAY = date.today().strftime("%Y-%m-%d")
-STOCKS = ('Saham', 'ANTM.JK', 'BBCA.JK', 'GOOG', 'AAPL', 'MSFT', 'GME')
+STOCKS = ('GOOG', 'AAPL', 'MSFT', 'AMZN', 'BABA', 'AAL', 'IBM')
 
 st.title("Tuyul Era 5.0 :sunglasses:")
 
-selected_stock = st.selectbox("Pilih Saham", STOCKS)
-n_years = st.slider("Berapa Tahun untuk memprediksi", min_value=1, max_value=3)
+selected_stock = st.selectbox("Choose Stock", STOCKS)
+n_years = st.slider("Select Period", min_value=1, max_value=3)
 period = n_years * 365
 
-if selected_stock != 'Saham':
+submit = st.button("Submit", type="primary")
+
+
+if submit:
     data_load_state = st.text("Tunggu bwanngggg!!")
     stock_data = load_data(selected_stock, START, TODAY)
     data_load_state.text("Done!")
@@ -37,8 +44,16 @@ if selected_stock != 'Saham':
     forecast = model.predict(data_train, period)
     model.show_forecast(forecast)
 
+    # SECTION: SENTIMENT ANALYSIS
+    st.subheader("SENTIMENT ANALYSIS :sunglasses:")
     # Get News
-    news = get_news(selected_stock)
-    st.write(news)
+    db = Database(selected_stock)
+    with st.spinner("Wait a minute.."):
+        news = get_news(selected_stock)
+        # db.createTable()
+        db.insertTable(news)
+        news_db = db.get_data()
+        print(news_db)  
+
 
 

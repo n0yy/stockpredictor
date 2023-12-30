@@ -20,15 +20,20 @@ def get_news(ticker):
     links = [item["link"] for item in data.news]
     
     # Scapping News
-    news = []
-    for link in links:
-        response = requests.get(link).content
-        p_tags = BeautifulSoup(response, "html.parser").find_all("p")
-        
-        contents = [text.get_content() for text in p_tags]
-        x = " ".join(contents)
+    try:
+        news = []
+        for link in links:
+            response = requests.get(link).content
+            p_tags = BeautifulSoup(response, "html.parser").find_all("p")
 
-        news.append(x)
-        
+            contents = [content.get_text() for content in p_tags if len(content.get_text()) > 100]
+
+            x = " ".join(contents)
+            if x != "":
+                news.append(x)
+
+    except:
+        return "Something wrong, try again later :smile:"
+
     return news
 
