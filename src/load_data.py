@@ -25,11 +25,9 @@ def get_news(ticker):
         response = requests.get(link).content
         p_tags = BeautifulSoup(response, "html.parser").find_all("p")
         
-        contents = []
-        for text in p_tags:
-            contents.append(text.get_text())
-        
+        contents = [text.get_content() for text in p_tags]
         x = " ".join(contents)
+
         news.append(x)
         
     return news
