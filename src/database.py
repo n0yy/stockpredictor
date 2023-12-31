@@ -3,7 +3,7 @@ import json
 
 class Database:
     def __init__(self, ticker: str):
-        self.conn = sqlite3.connect("database.db")
+        self.conn = sqlite3.connect("database.sqlite")
         self.cursor = self.conn.cursor()
         self.ticker = ticker
 
@@ -13,6 +13,8 @@ class Database:
                     text TEXT)"""
         try:
             self.cursor.execute(query)
+            # Commit changes
+            self.conn.commit()
         except Exception as e:
             print(f"Ada kesalahan saat mencoba Membuat table: {e}")
         
@@ -21,10 +23,19 @@ class Database:
     def insertTable(self, data: list):
         try:
             for text in data:
-                self.cursor.execute(f'INSERT INTO {self.ticker}_news (text) VALUES (?)', (text,))
-                print("Data Berhasil Di insert")
+                # Check data apakah data sudah ada apa belum.
+                self.cursor.execute(f'SELECT * FROM {self.ticker}_news WHERE text = ?', (text,))
+                existing_data = self.cursor.fetchone()
+
+                if not existing_data:
+                    self.cursor.execute(f'INSERT INTO {self.ticker}_news (text) VALUES (?)', (text,))
+                else:
+                    print("Data already exist!")
+
+            # Commit changes
+            self.conn.commit()
         except Exception as e:
-            print(f"Ada kesalahan saat mencoba menambahkan data: {e}")
+            print(f"Something wrong when we try to Insert Data: {e}")
 
     def get_data(self):
         try:

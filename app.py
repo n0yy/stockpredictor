@@ -8,20 +8,17 @@ from src.database import Database
 
 st.set_page_config(page_title="Tuyul Modern")
 
-
-
-
 START = "2017-01-01"
 TODAY = date.today().strftime("%Y-%m-%d")
 STOCKS = ('GOOG', 'AAPL', 'MSFT', 'AMZN', 'BABA', 'AAL', 'IBM')
 
-st.title("Tuyul Era 5.0 :sunglasses:")
+st.title("ReksaDanang :chart_with_upwards_trend: :chart_with_downwards_trend:")
 
 selected_stock = st.selectbox("Choose Stock", STOCKS)
-n_years = st.slider("Select Period", min_value=1, max_value=3)
-period = n_years * 365
+n_years = st.slider("Select Period", min_value=0.5, max_value=3.0)
+period = int(n_years * 365)
 
-submit = st.button("Submit", type="primary")
+submit = st.button("Submit :rocket:", type="primary")
 
 
 if submit:
@@ -50,10 +47,10 @@ if submit:
     db = Database(selected_stock)
     with st.spinner("Wait a minute.."):
         news = get_news(selected_stock)
-        # db.createTable()
+        db.createTable()
         db.insertTable(news)
         news_db = db.get_data()
-        print(news_db)  
+        st.write(news_db)
 
 
 
