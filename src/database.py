@@ -5,7 +5,8 @@ class Database:
     def __init__(self, ticker: str):
         self.conn = sqlite3.connect("database.sqlite")
         self.cursor = self.conn.cursor()
-        self.ticker = ticker
+        self.ticker = ticker.split("-")
+        self.ticker = "_".join(self.ticker)
 
     def createTable(self):
         query = f"""CREATE TABLE IF NOT EXISTS {self.ticker}_news (

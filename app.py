@@ -10,7 +10,7 @@ st.set_page_config(page_title="Tuyul Modern")
 
 START = "2017-01-01"
 TODAY = date.today().strftime("%Y-%m-%d")
-STOCKS = ('GOOG', 'AAPL', 'MSFT', 'AMZN', 'BABA', 'AAL', 'IBM')
+STOCKS = ('GOOG', 'AAPL', 'MSFT', 'AMZN', 'BABA', 'AAL', 'IBM', 'BTC-USD', 'ETH-USD')
 
 st.title("ReksaDanang :chart_with_upwards_trend: :chart_with_downwards_trend:")
 
